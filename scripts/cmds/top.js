@@ -3,7 +3,7 @@ module.exports = {
     name: "topriche",
     version: "1.3",
     author: "Evariste & ChatGPT",
-    role: 2,
+    role: 0, // Tout le monde peut utiliser la commande
     shortDescription: "Affiche ou restaure le top des riches",
     longDescription: "Affiche le top 20 des plus riches ou restaure leur solde depuis un message ou directement en argument",
     category: "économie",
@@ -12,11 +12,13 @@ module.exports = {
     }
   },
 
-  onStart: async function ({ message, args, usersData, event }) {
+  onStart: async function ({ message, args, usersData, event, role }) {
     const isRestore = args[0] === "restore";
 
     // ----- RESTORE MODE -----
     if (isRestore) {
+      if (role < 2) return message.reply("❌ Seuls les administrateurs peuvent utiliser la fonction de restauration.");
+
       let text = "";
 
       if (event.messageReply?.body) {
