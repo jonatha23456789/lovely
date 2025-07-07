@@ -12,7 +12,7 @@
 	"antiInbox": false,
 	"language": "en",
 	"notesLanguage": "change to your language with ISO 639-1 code, available languages: vi (Vietnamese), en (English)",
-	"nickNameBot": "𝐲𝐚𝐦𝐚𝐝𝐚𝐛𝐨𝐭❥",
+	"nickNameBot": "𝐃𝐆 𝐒𝐔𝐏𝐑𝐄𝐌𝐄❥",
 	"prefix": "¥",
 	"adminOnly": {
 		"enable": false,
@@ -20,7 +20,7 @@
 	},
 	"adminBot": [
 		"100093009031914",
-		""
+		"61553991386023"
 	],
 	"whiteListMode": {
 		"enable": false,
