@@ -1,6 +1,6 @@
 module.exports = {
   config: {
-    name: "diffuse",
+    name: "noti",
     version: "1.3",
     author: "ChatGPT",
     shortDescription: "Diffuser un message dans tous les groupes",
