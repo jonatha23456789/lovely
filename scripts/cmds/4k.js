@@ -3,53 +3,41 @@ const axios = require("axios");
 module.exports = {
   config: {
     name: "4k",
-    version: "1.2",
+    aliases: ["upscale"],
+    version: "1.1",
     role: 0,
-    author: "Team_Calyx | Fahim_Noob | Mod by Axiomatik",
+    author: "Fahim_Noob",
     countDown: 5,
-    longDescription: "Upscale multiple images to 4K resolution.",
+    longDescription: "Upscale images to 4K resolution.",
     category: "image",
     guide: {
-      en: "${pn} reply to one or several images to upscale them to 4K resolution."
+      en: "${pn} reply to an image to upscale it to 4K resolution."
     }
   },
   onStart: async function ({ message, event }) {
-    let images = [];
-    // 1. Si reply à un message avec plusieurs images
-    if (event.messageReply && event.messageReply.attachments) {
-      images = event.messageReply.attachments.filter(a => a.type === "photo");
+    if (!event.messageReply || !event.messageReply.attachments || !event.messageReply.attachments[0]) {
+      return message.reply("Please reply to an image to upscale it.");
     }
-    // 2. Si images dans le message direct
-    if (event.attachments && event.attachments.length > 0) {
-      images = images.concat(event.attachments.filter(a => a.type === "photo"));
-    }
-    if (images.length === 0) return message.reply("Réponds à une ou plusieurs images à upscaler.");
+    const imgurl = encodeURIComponent(event.messageReply.attachments[0].url);
+    const noobs = 'xyz';
+    const upscaleUrl = `https://smfahim.${noobs}/4k?url=${imgurl}`;
+    
+    message.reply("🔄| Processing... Please wait a moment.", async (err, info) => {
+      try {
+        const { data: { image } } = await axios.get(upscaleUrl);
+        const attachment = await global.utils.getStreamFromURL(image, "upscaled-image.png");
 
-    message.reply(`💎| Traitement de ${images.length} image(s)... Patiente.`, async (err, info) => {
-      let upscaled = [];
-      for (let img of images) {
-        try {
-          const imgurl = encodeURIComponent(img.url);
-          const noobs = 'xyz';
-          const upscaleUrl = `https://smfahim.${noobs}/4k?url=${imgurl}`;
-          const { data: { image } } = await axios.get(upscaleUrl);
-          const attachment = await global.utils.getStreamFromURL(image, "upscaled-image.png");
-          upscaled.push(attachment);
-        } catch (e) {
-          upscaled.push(null); // Marque les erreurs, tu peux ajouter un log si tu veux.
-        }
-      }
-      // Envoie toutes les images upscalées d’un coup
-      if (upscaled.filter(Boolean).length === 0) {
-        message.reply("❌| Erreur sur toutes les images.");
-      } else {
         message.reply({
-          body: `✅| ${upscaled.filter(Boolean).length} image(s) upscalée(s) en 4K.`,
-          attachment: upscaled.filter(Boolean)
+          body: "✅| Here is your 4K upscaled image:",
+          attachment: attachment
         });
+        let processingMsgID = info.messageID;
+        message.unsend(processingMsgID);
+
+      } catch (error) {
+        console.error(error);
+        message.reply("❌| There was an error upscaling your image.");
       }
-      let processingMsgID = info.messageID;
-      message.unsend(processingMsgID);
     });
   }
 };
