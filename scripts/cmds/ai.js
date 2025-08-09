@@ -45,7 +45,7 @@ module.exports = {
 
   config: {
 
-    name: 'ai',
+    name: 'lv',
 
     version: '1.1.1',
 
